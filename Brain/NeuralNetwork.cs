@@ -41,7 +41,9 @@ namespace Simulation.Brain
                     layers[layerIndex].Neurons[neuronIndex].Id = NeuronId++;
                     layers[layerIndex].Neurons[neuronIndex].Bias = random.NextDouble() * 10;
                     layers[layerIndex].Neurons[neuronIndex].Edges = new Edge[layers[layerIndex + 1].Neurons.Count];
-                    for(int nextLayerEdgeIndex = 0; nextLayerEdgeIndex < layers[layerIndex + 1].Neurons.Count(); nextLayerEdgeIndex++)
+
+                    //FIX THIS , EDGES NOT BEING ASSIGNED PROPERLY
+                    for (int nextLayerEdgeIndex = 0; nextLayerEdgeIndex < layers[layerIndex + 1].Neurons.Count(); nextLayerEdgeIndex++)
                     {
                         layers[layerIndex].Neurons[neuronIndex].Edges[nextLayerEdgeIndex] = new Edge
                         {

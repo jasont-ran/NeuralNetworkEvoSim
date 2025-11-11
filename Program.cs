@@ -10,7 +10,11 @@ namespace Simulation
         [STAThread]
         static void Main()
         {
+            int now = DateTime.Now.Millisecond;
             NeuralNetwork brain = new NeuralNetwork();
+            int later = DateTime.Now.Millisecond;
+
+            int bryh = (later - now);
 
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.

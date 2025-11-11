@@ -12,6 +12,5 @@ namespace Simulation.Brain
         public int Weight { get; set; }
         public Neuron? FromNeuron { get; set; }
         public Neuron? ToNeuron { get; set; } 
-        }
     }
 }

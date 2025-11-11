@@ -9,10 +9,6 @@ namespace Simulation
         private System.Windows.Forms.Timer _timer;
         private List<Entity> herbivores;
         private List<Entity> carnivores;
-
-
-        Random randomGenerator = new Random();
-
         private int ScreenWidth = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
         private int ScreenHeight = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
 
@@ -44,8 +40,8 @@ namespace Simulation
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            herbivores = AssignCoordinates(herbivores);
-            carnivores = AssignCoordinates(carnivores);
+            herbivores = InitialCoordinates(herbivores);
+            carnivores = InitialCoordinates(carnivores);
 
             _timer.Tick += timer1_Tick;
         }
@@ -66,7 +62,7 @@ namespace Simulation
             Invalidate();
         }
 
-        private List<Entity> AssignCoordinates(List<Entity> entities)
+        private List<Entity> InitialCoordinates(List<Entity> entities)
         {
             foreach (var entity in entities)
             {
