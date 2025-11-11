@@ -10,6 +10,6 @@ namespace Simulation.Brain
     //http://neuralnetworksanddeeplearning.com/about.html
     public class Layer
     {
-        public List<float> Inputs = new List<float>();
+        public List<Neuron> Neurons { get; set; } = new List<Neuron>();
     }
 }
