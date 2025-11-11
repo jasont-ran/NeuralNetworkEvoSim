@@ -42,13 +42,12 @@ namespace Simulation.Brain
                     layers[layerIndex].Neurons[neuronIndex].Bias = random.NextDouble() * 10;
                     layers[layerIndex].Neurons[neuronIndex].Edges = new Edge[layers[layerIndex + 1].Neurons.Count];
 
-                    //FIX THIS , EDGES NOT BEING ASSIGNED PROPERLY
-                    for (int nextLayerEdgeIndex = 0; nextLayerEdgeIndex < layers[layerIndex + 1].Neurons.Count(); nextLayerEdgeIndex++)
+                    for (int nextLayerNeuronIndex = 0; nextLayerNeuronIndex < layers[layerIndex + 1].Neurons.Count(); nextLayerNeuronIndex++)
                     {
-                        layers[layerIndex].Neurons[neuronIndex].Edges[nextLayerEdgeIndex] = new Edge
+                        layers[layerIndex].Neurons[neuronIndex].Edges[nextLayerNeuronIndex] = new Edge
                         {
                             FromNeuron = layers[layerIndex].Neurons[neuronIndex],
-                            ToNeuron = layers[layerIndex + 1].Neurons[nextLayerEdgeIndex],
+                            ToNeuron = layers[layerIndex + 1].Neurons[nextLayerNeuronIndex],
                             Weight = random.Next(0, 10)
                         };
                     }
