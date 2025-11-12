@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,12 +18,6 @@ namespace Simulation.Brain
 
         public NeuralNetwork()
         {
-            //layers = new List<Layer>();
-
-            //int amountOfLayers = 4;
-            //int inputLayerNeurons = 4;
-            //int hiddenLayerNeurons = 4;
-            //int outputLayerNeurons = 2;
             layers = new List<Layer>()
             {
                 new Layer{ Neurons = { new Neuron { }, new Neuron { }, new Neuron { }, new Neuron { } } },
@@ -55,11 +51,53 @@ namespace Simulation.Brain
             }
         }
 
-        public void ForwardPropagation()
+        public float[] EntityThink(float[] inputs)
         {
+            SetInputLayerValues(inputs);
+            ForwardPropagation();
 
+
+            return new float[] { 0f, 0f };
+            
         }
-        public void BackwardsPropagation()
+
+        private void SetInputLayerValues(float[] inputs)
+        {
+            if(inputs.Length != layers[0].Neurons.Count)
+            {
+                throw new ArgumentException("Input length does not match number of input neurons nodes.");
+            }
+
+            for (int i = 0; i < layers[0].Neurons.Count; i++)
+            {
+                layers[0].Neurons[i].InputValue = inputs[i];
+            }
+        }
+
+        private void ForwardPropagation()
+        {
+            for(int layerIndex = 0; layerIndex < layers.Count - 2; layerIndex++)
+            {
+                int nextLayerNeuronIndex = 0;
+                for (int curNeuronIndex = 0; curNeuronIndex < layers[layerIndex].Neurons.Count; curNeuronIndex++)
+                {
+                    var result = 0.0;
+                    foreach(var neuron in layers[layerIndex].Neurons)
+                    {
+                        result += neuron.Edges[nextLayerNeuronIndex].Weight * neuron.InputValue;
+                    }
+                    result += layers[layerIndex + 1].Neurons[nextLayerNeuronIndex].Bias;
+                    nextLayerNeuronIndex++;
+                }
+            }
+        }
+
+        private float[] OutputValues()
+        {
+            return new float[] { 0f, 0f };
+        }
+
+        private void BackwardsPropagation()
         {
 
         }

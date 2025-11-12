@@ -10,6 +10,7 @@ namespace Simulation.Brain
     {
         public int Id { get; set; }
         public double Bias { get; set; }
-        public Edge[]? Edges { get; set; }
+        public double InputValue { get; set; }
+        public Edge[] Edges { get; set; }
     }
 }
