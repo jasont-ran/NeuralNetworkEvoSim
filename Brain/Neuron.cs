@@ -9,8 +9,8 @@ namespace Simulation.Brain
     public class Neuron
     {
         public int Id { get; set; }
-        public double Bias { get; set; }
-        public double InputValue { get; set; }
+        public float Bias { get; set; }
+        public float InputValue { get; set; }
         public Edge[] Edges { get; set; }
     }
 }

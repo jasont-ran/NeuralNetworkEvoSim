@@ -13,8 +13,10 @@ namespace Simulation.Brain
     {
         //ADD RANDOM GENERATOR FOR INITIAL WEIGHTS AND BIASES
         private readonly Random random = new Random();
-        private List<Layer> layers;
+        public List<Layer> layers;
         private int NeuronId = 1;
+        private readonly int maxRange = 1;
+        private readonly int minRange = -1;
 
         public NeuralNetwork()
         {
@@ -30,22 +32,24 @@ namespace Simulation.Brain
 
         private void InitializeNetwork(List<Layer> layers)
         {
-            for(int layerIndex = 0; layerIndex < layers.Count - 1; layerIndex++)
+            for(int layerIndex = 0; layerIndex < layers.Count; layerIndex++)
             {
                 for(int neuronIndex = 0; neuronIndex < layers[layerIndex].Neurons.Count; neuronIndex++)
                 {
                     layers[layerIndex].Neurons[neuronIndex].Id = NeuronId++;
-                    layers[layerIndex].Neurons[neuronIndex].Bias = random.NextDouble() * 10;
-                    layers[layerIndex].Neurons[neuronIndex].Edges = new Edge[layers[layerIndex + 1].Neurons.Count];
-
-                    for (int nextLayerNeuronIndex = 0; nextLayerNeuronIndex < layers[layerIndex + 1].Neurons.Count(); nextLayerNeuronIndex++)
+                    layers[layerIndex].Neurons[neuronIndex].Bias = (float)random.NextDouble() * (maxRange - minRange) + minRange;
+                    if(layerIndex < layers.Count - 1)
                     {
-                        layers[layerIndex].Neurons[neuronIndex].Edges[nextLayerNeuronIndex] = new Edge
+                        layers[layerIndex].Neurons[neuronIndex].Edges = new Edge[layers[layerIndex + 1].Neurons.Count];
+                        for (int nextLayerNeuronIndex = 0; nextLayerNeuronIndex < layers[layerIndex + 1].Neurons.Count(); nextLayerNeuronIndex++)
                         {
-                            FromNeuron = layers[layerIndex].Neurons[neuronIndex],
-                            ToNeuron = layers[layerIndex + 1].Neurons[nextLayerNeuronIndex],
-                            Weight = random.Next(0, 10)
-                        };
+                            layers[layerIndex].Neurons[neuronIndex].Edges[nextLayerNeuronIndex] = new Edge
+                            {
+                                FromNeuron = layers[layerIndex].Neurons[neuronIndex],
+                                ToNeuron = layers[layerIndex + 1].Neurons[nextLayerNeuronIndex],
+                                Weight = random.Next(0, 10)
+                            };
+                        }
                     }
                 }
             }
@@ -54,11 +58,9 @@ namespace Simulation.Brain
         public float[] EntityThink(float[] inputs)
         {
             SetInputLayerValues(inputs);
-            ForwardPropagation();
+            var output = ForwardPropagation();
 
-
-            return new float[] { 0f, 0f };
-            
+            return output;
         }
 
         private void SetInputLayerValues(float[] inputs)
@@ -74,23 +76,23 @@ namespace Simulation.Brain
             }
         }
 
-        private void ForwardPropagation()
+        private float[] ForwardPropagation()
         {
-            for(int layerIndex = 0; layerIndex < layers.Count - 2; layerIndex++)
+            for(int curLayer = 0; curLayer < layers.Count - 1; curLayer++)
             {
                 int nextLayerNeuronIndex = 0;
-                for (int curNeuronIndex = 0; curNeuronIndex < layers[layerIndex].Neurons.Count; curNeuronIndex++)
+                for (int curNeuron = 0; curNeuron < layers[curLayer].Neurons.Count; curNeuron++)
                 {
-                    var result = 0.0;
-                    foreach(var neuron in layers[layerIndex].Neurons)
+                    foreach(var neuron in layers[curLayer].Neurons)
                     {
-                        result += neuron.Edges[nextLayerNeuronIndex].Weight * neuron.InputValue;
+                        layers[curLayer + 1].Neurons[nextLayerNeuronIndex].InputValue += neuron.Edges[nextLayerNeuronIndex].Weight * neuron.InputValue;
                     }
-                    result += layers[layerIndex + 1].Neurons[nextLayerNeuronIndex].Bias;
+                    layers[curLayer + 1].Neurons[nextLayerNeuronIndex].InputValue += layers[curLayer + 1].Neurons[nextLayerNeuronIndex].Bias;
                     nextLayerNeuronIndex++;
                 }
-                if (layerIndex > 0) { ReluActivation(layers[layerIndex]); }
+                if (curLayer > 0) { ReluActivation(layers[curLayer]); }
             }
+            return layers.Last().Neurons.Select(n => n.InputValue).ToArray();
         }
 
         private void ReluActivation(Layer layer)
