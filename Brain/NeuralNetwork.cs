@@ -89,6 +89,18 @@ namespace Simulation.Brain
                     result += layers[layerIndex + 1].Neurons[nextLayerNeuronIndex].Bias;
                     nextLayerNeuronIndex++;
                 }
+                if (layerIndex > 0) { ReluActivation(layers[layerIndex]); }
+            }
+        }
+
+        private void ReluActivation(Layer layer)
+        {
+            foreach(var neuron in layer.Neurons)
+            {
+                if(neuron.InputValue < 0)
+                {
+                    neuron.InputValue = 0;
+                }
             }
         }
 
