@@ -12,8 +12,6 @@ namespace Simulation
         {
             int now = DateTime.Now.Millisecond;
             NeuralNetwork brain = new NeuralNetwork();
-            NeuralNetwork test = brain;
-            Thread.Sleep(1000);
             brain.EntityThink(new float[] { 0.5f, 0.8f, 0.2f, 1f });
 
             int later = DateTime.Now.Millisecond;
